@@ -51,13 +51,22 @@ class ChargesController
 
     public function updateBalance()
     {
-        //calcualte total of charges for current month and minus it from the total income
-        $stmt = $this->db->prepare("SELECT SUM(Montant) AS TotalCharges FROM charges WHERE MONTH(DateCharge) = MONTH(CURRENT_DATE) AND YEAR(DateCharge) = YEAR(CURRENT_DATE)");
-        $stmt->execute();
-        $totalCharges = $stmt->fetch(PDO::FETCH_ASSOC)['TotalCharges'];
-        $stmt = $this->db->prepare("UPDATE portefeuille SET Solde = TotalIncome - :totalCharges WHERE CodePortefeuille = :codePortefeuille");
+        // Calculate total of charges for current month and minus it from the total income
+        $stmt = $this->db->prepare("SELECT SUM(Montant) AS TotalCharges FROM charges WHERE MONTH(DateCharge) = MONTH(CURRENT_DATE) AND YEAR(DateCharge) = YEAR(CURRENT_DATE) AND CodePortefeuille = :codePortefeuille");
+        $stmt->execute([':codePortefeuille' => $_SESSION['user']['CodePortefeuille']]);
+        $totalCharges = $stmt->fetch(PDO::FETCH_ASSOC)['TotalCharges'] ?? 0;  // Use null coalescing operator
+
+        // Get current TotalIncome
+        $stmt = $this->db->prepare("SELECT TotalIncome FROM portefeuille WHERE CodePortefeuille = :codePortefeuille");
+        $stmt->execute([':codePortefeuille' => $_SESSION['user']['CodePortefeuille']]);
+        $totalIncome = $stmt->fetch(PDO::FETCH_ASSOC)['TotalIncome'] ?? 0;
+
+        // Calculate new balance
+        $newBalance = $totalIncome - $totalCharges;
+
+        $stmt = $this->db->prepare("UPDATE portefeuille SET Solde = :solde WHERE CodePortefeuille = :codePortefeuille");
         $stmt->execute([
-            ':totalCharges' => $totalCharges,
+            ':solde' => $newBalance,
             ':codePortefeuille' => $_SESSION['user']['CodePortefeuille']
         ]);
     }
@@ -132,7 +141,6 @@ class ChargesController
                 header('Location: index.php?controller=charges&action=index');
                 exit();
             }
-
             require 'View/charges/show.php';
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();

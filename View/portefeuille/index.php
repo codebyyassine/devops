@@ -41,7 +41,7 @@
         $withSaving = ($portefeuille['TotalIncome'] * (1 - ($portefeuille['SavingPourcentage'] ?? 0) / 100)) - $totalCharges;
         $_SESSION['user']['BalanceWithSaving'] = $withSaving;
         echo htmlspecialchars($withSaving ?? 0); ?> DH
-            (<?php echo htmlspecialchars($portefeuille['Solde'] ?? 0); ?> DH without saving)</p>
+            (<?php echo htmlspecialchars($portefeuille['TotalIncome'] - $totalCharges ?? 0); ?> DH without saving)</p>
         <p>Total Charges for this month: <?php echo htmlspecialchars($totalCharges ?? 0); ?> DH</p>
     </div>
 
