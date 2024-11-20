@@ -46,19 +46,17 @@ switch ($controller) {
         if ($action == 'index') {
             $controller->index();
         } elseif ($action == 'create') {
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $controller->create($_POST);
-            } else {
-                require 'View/charges/add.php';
-            }
+            $controller->create($_POST);
         } elseif ($action == 'delete') {
-            $controller->delete($_GET['id']);
+            $controller->delete($_POST);
         } elseif ($action == 'edit') {
             $controller->edit($_GET['id']);
         } elseif ($action == 'update') {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $controller->update($_POST['id'], $_POST);
+                $controller->update($_POST);
             }
+        } elseif ($action == 'get') {
+            $controller->get($_GET['id']);
         }
         break;
 

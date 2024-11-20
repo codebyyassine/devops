@@ -55,7 +55,7 @@
                         <td>
                             <form method="post" action="index.php?controller=charges&action=delete"
                                 style="display: flex; align-items: center; justify-content: center;">
-                                <input type="hidden" name="id" value="<?php echo $charge['CodeCharge']; ?>">
+                                <input type="hidden" name="CodeCharge" value="<?php echo $charge['CodeCharge']; ?>">
                                 <button type="button" class="edit-button"
                                     onclick="openEditModal(<?php echo $charge['CodeCharge']; ?>)">Edit</button>
                                 <button type="submit" class="delete-button">Delete</button>
@@ -126,8 +126,43 @@
         function openEditModal(chargeId) {
             document.getElementById('chargeModal').style.display = 'block';
             document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
-            document.getElementById('chargeId').value = chargeId;
-
+            
+            // Update modal title
+            document.querySelector('.modal-content h2').textContent = 'Edit Charge';
+            
+            // Change form action to edit
+            const form = document.querySelector('.modal-content form');
+            form.action = 'index.php?controller=charges&action=update';
+            
+            // Add charge ID to form
+            let chargeIdInput = form.querySelector('input[name="CodeCharge"]');
+            if (!chargeIdInput) {
+                chargeIdInput = document.createElement('input');
+                chargeIdInput.type = 'hidden';
+                chargeIdInput.name = 'CodeCharge';
+                form.appendChild(chargeIdInput);
+            }
+            chargeIdInput.value = chargeId;
+            
+            // Fetch charge data using AJAX
+            fetch(`index.php?controller=charges&action=get&id=${chargeId}`)
+                .then(response => response.json())
+                .then(charge => {
+                    // Populate form fields
+                    form.querySelector('input[name="NomCharge"]').value = charge.NomCharge;
+                    form.querySelector('input[name="Description"]').value = charge.Description;
+                    form.querySelector('input[name="Montant"]').value = charge.Montant;
+                    form.querySelector(`input[name="Variable"][value="${charge.Variable}"]`).checked = true;
+                    form.querySelector('input[name="DateCharge"]').value = charge.DateCharge;
+                    
+                    // Update submit button text
+                    form.querySelector('button[type="submit"]').textContent = 'Update Charge';
+                })
+                .catch(error => {
+                    console.error('Error fetching charge data:', error);
+                    alert('Error loading charge data. Please try again.');
+                    closeModal();
+                });
         }
 
         function closeModal() {

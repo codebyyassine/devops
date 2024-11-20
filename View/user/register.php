@@ -3,7 +3,7 @@
 
 <head>
     <title>Register</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <!-- <link rel="stylesheet" href="/assets/css/style.css"> -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
@@ -26,12 +26,31 @@
             font-family: "Raleway", sans-serif;
             font-size: 11pt;
         }
+        .alert {
+    background: #fff3cd;
+    color: #856404;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: none;
+    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Raleway", sans-serif;
+    font-size: 0.9em;
+    text-align: center;
+}
 
+.alert.success {
+    background: #d4edda;
+    color: #155724;
+}
         #card {
             background: #fbfbfb;
             border-radius: 8px;
             box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.65);
-            height: 460px;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;    
             /* Slightly taller for register form */
             margin: 6rem auto 8.1rem auto;
             width: 329px;
@@ -39,6 +58,7 @@
 
         #card-content {
             padding: 12px 44px;
+            flex-grow: 1;
         }
 
         #card-title {
@@ -112,6 +132,16 @@
                 <h2>REGISTER</h2>
                 <div class="underline-title"></div>
             </div>
+
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert">
+                    <?php 
+                        echo htmlspecialchars($_SESSION['error']);
+                        unset($_SESSION['error']); 
+                    ?>
+                </div>
+            <?php endif; ?>
+
             <form method="post" action="index.php?controller=user&action=register" class="form">
                 <label for="user-fullname" style="padding-top:13px">&nbsp;Full Name</label>
                 <input id="user-fullname" class="form-content" type="text" name="Fullname" required />

@@ -3,7 +3,7 @@
 
 <head>
     <title>Login</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <!-- <link rel="stylesheet" href="/assets/css/style.css"> -->
     <style>
         a {
             text-decoration: none;
@@ -29,14 +29,36 @@
             background: #fbfbfb;
             border-radius: 8px;
             box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.65);
-            height: 410px;
+            height: 430px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 6rem auto 8.1rem auto;
             width: 329px;
         }
 
         .card-content {
+            flex-grow: 1;
             padding: 12px 44px;
         }
+
+        .alert {
+    background: #fff3cd;
+    color: #856404;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: none;
+    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Raleway", sans-serif;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.alert.success {
+    background: #d4edda;
+    color: #155724;
+}
 
         .card-title {
             font-family: "Raleway Thin", sans-serif;
@@ -108,6 +130,24 @@
                 <h2>LOGIN</h2>
                 <div class="underline-title"></div>
             </div>
+            
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert">
+                    <?php 
+                        echo htmlspecialchars($_SESSION['error']);
+                        unset($_SESSION['error']); 
+                    ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert success">
+                    <?php 
+                        echo htmlspecialchars($_SESSION['success']);
+                        unset($_SESSION['success']); 
+                    ?>
+                </div>
+            <?php endif; ?>
 
             <form method="post" action="index.php?controller=user&action=login">
                 <div class="input-container">

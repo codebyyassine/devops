@@ -71,40 +71,26 @@ class ChargesController
         ]);
     }
 
-    public function delete($id)
+    public function delete($data)
     {
-        try {
-            $stmt = $this->db->prepare("DELETE FROM charges WHERE CodeCharge = :id");
-            $stmt->execute([':id' => $id]);
-            $this->updateBalance();
-            if (!$this->isTestMode) {
-                header('Location: index.php?controller=charges&action=index');
+        if (isset($data['CodeCharge'])) {
+            $chargeId = $data['CodeCharge'];
+            try {
+                $stmt = $this->db->prepare("DELETE FROM charges WHERE CodeCharge = :id");
+                $stmt->execute([':id' => $chargeId]);
+                $this->updateBalance();
+                if (!$this->isTestMode) {
+                    header('Location: index.php?controller=charges&action=index');
+                }
+                return true;
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+                return false;
             }
-            return true;
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return false;
         }
     }
 
-    public function edit($id)
-    {
-        try {
-            $stmt = $this->db->prepare("SELECT * FROM charges WHERE CodeCharge = :id");
-            $stmt->execute([':id' => $id]);
-            $charge = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if (!$charge) {
-                header('Location: index.php?controller=charges&action=index');
-                exit();
-            }
-            require 'View/charges/edit.php';
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
-
-    public function update($id, $data)
+    public function update($data)
     {
         try {
             $stmt = $this->db->prepare("UPDATE charges 
@@ -121,12 +107,36 @@ class ChargesController
                 ':montant' => $data['Montant'],
                 ':dateCharge' => $data['DateCharge'],
                 ':variable' => $data['Variable'],
-                ':id' => $id
+                ':id' => $data['CodeCharge'],
             ]);
             $this->updateBalance();
             header('Location: index.php?controller=charges&action=index');
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
+        }
+    }
+    
+    public function get($id)
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT * FROM charges WHERE CodeCharge = :id");
+            $stmt->execute([':id' => $id]);
+            $charge = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$charge) {
+                http_response_code(404);
+                echo json_encode(['error' => 'Charge not found']);
+                return;
+            }
+
+            header('Content-Type: application/json');
+            echo json_encode($charge);
+            return;
+
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+            return;
         }
     }
 
