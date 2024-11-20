@@ -38,11 +38,16 @@
    ```
 
 6. Access PHPMyAdmin at:
+
    ```
    http://localhost:8081
    ```
+
    - Username: `user`
    - Password: `password`
+
+   - RootUser: `root`
+   - Password: `rootpassword`
 
 ## Make Commands
 
