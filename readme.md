@@ -45,8 +45,8 @@
 
    - Username: `user`
    - Password: `password`
-
-   - RootUser: `root`
+   For Root user : 
+   - Username: `root`
    - Password: `rootpassword`
 
 ## Make Commands
