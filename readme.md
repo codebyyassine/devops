@@ -10,13 +10,13 @@
 1. Clone the repository:
 
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/ismail01100/DevOps
    ```
 
 2. Open Command Prompt and navigate to the project folder:
 
    ```sh
-   cd <project-folder>
+   cd DevOps
    ```
 
 3. Enter the bash console using the following command:
