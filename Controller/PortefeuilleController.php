@@ -56,7 +56,9 @@ class PortefeuilleController
 
             $withSaving = ($portefeuille['TotalIncome'] * (1 - ($portefeuille['SavingPourcentage'] ?? 0) / 100)) - $totalCharges;
             $savingsWarning = $this->getSavingsWarning($withSaving, $portefeuille);
-
+            if($portefeuille['Salaire'] == 0){
+                $firstTime = true;
+            }
             require 'View/portefeuille/index.php';
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();

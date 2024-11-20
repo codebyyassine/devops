@@ -3,7 +3,7 @@
 
 <head>
   <title>Settings - My Portfolio</title>
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <!-- <link rel="stylesheet" href="/assets/css/style.css"> -->
   <style>
     body {
       background: -webkit-linear-gradient(bottom, #2dbd6e, #a6f77b);
@@ -12,6 +12,10 @@
       min-height: 100vh;
       margin: 0;
       padding: 20px;
+      
+      margin: auto;
+            max-width: 800px;
+            min-width: 800px;
     }
 
     .card {
@@ -87,6 +91,7 @@
     .form-group input {
       width: 100%;
       padding: 10px;
+      padding-right:0px;
       border: 1px solid #ddd;
       border-radius: 4px;
       font-family: "Raleway", sans-serif;
